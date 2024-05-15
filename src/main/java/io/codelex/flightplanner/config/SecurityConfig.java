@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -15,13 +17,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().authenticated())
-                .httpBasic(httpBasic -> httpBasic
-                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint()));
+                        .requestMatchers("/admin-api/**").authenticated()
+                        .anyRequest().permitAll());
 
         return http.build();
     }
-
 
 }
