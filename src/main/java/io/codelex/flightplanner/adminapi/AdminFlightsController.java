@@ -1,6 +1,5 @@
 package io.codelex.flightplanner.adminapi;
 
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,21 +17,21 @@ public class AdminFlightsController {
 
     @GetMapping("{id}")
     public Flight getFlight(@PathVariable Integer id) {
-        if (flightsService.getFlightById(id) != null) {
-            return flightsService.getFlightById(id);
+        Flight flight = flightsService.getFlightById(id);
+        if (flight == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        return flight;
     }
 
     @PutMapping()
-    public Flight addFlight(HttpServletResponse response, @Valid @RequestBody AddFlightRequest request) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Flight addFlight(@Valid @RequestBody AddFlightRequest request) {
         Flight flight = request.toDomain(flightsService.getNewId());
         if (flightsService.add(flight).isPresent()) {
-            response.setStatus(HttpStatus.CREATED.value());
             return flight;
         }
-        response.setStatus(HttpStatus.CONFLICT.value());
-        return null;
+        throw new ResponseStatusException(HttpStatus.CONFLICT);
     }
 
     @DeleteMapping("/{id}")

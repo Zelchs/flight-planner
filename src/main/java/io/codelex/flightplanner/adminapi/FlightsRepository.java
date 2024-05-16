@@ -42,14 +42,10 @@ public class FlightsRepository {
         List<Airport> matchedAirports = new ArrayList<>();
         String keyword = search.toLowerCase().trim();
         for (Flight flight : flights) {
-            if (flight.from().city().toLowerCase().contains(keyword)
-                    || flight.from().country().toLowerCase().contains(keyword)
-                    || flight.from().airport().toLowerCase().contains(keyword)) {
+            if (airportContainsText(flight.from(), keyword)) {
                 matchedAirports.add(flight.from());
             }
-            if (flight.to().city().toLowerCase().contains(keyword)
-                    || flight.to().country().toLowerCase().contains(keyword)
-                    || flight.to().airport().toLowerCase().contains(keyword)) {
+            if (airportContainsText(flight.to(), keyword)) {
                 matchedAirports.add(flight.to());
             }
         }
@@ -69,6 +65,12 @@ public class FlightsRepository {
             }
         }
         return foundFlights;
+    }
+
+    private boolean airportContainsText(Airport airport, String text) {
+        return airport.city().toLowerCase().contains(text)
+                || airport.country().toLowerCase().contains(text)
+                || airport.airport().toLowerCase().contains(text);
     }
 
 }

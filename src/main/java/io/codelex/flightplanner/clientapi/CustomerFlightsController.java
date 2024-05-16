@@ -5,7 +5,6 @@ import io.codelex.flightplanner.adminapi.FlightsService;
 import io.codelex.flightplanner.airports.Airport;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -24,12 +23,8 @@ public class CustomerFlightsController {
     }
 
     @GetMapping("/airports")
-    public ResponseEntity<List<Airport>> getAirports(@RequestParam String search) {
-        List<Airport> airports = flightsService.getAirports(search);
-        if (airports.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(airports);
+    public List<Airport> getAirports(@RequestParam String search) {
+        return flightsService.getAirports(search);
     }
 
     @GetMapping("/flights/{id}")
@@ -41,11 +36,12 @@ public class CustomerFlightsController {
     }
 
     @PostMapping("/flights/search")
-    public ResponseEntity<Map<String, Object>> searchFlights(@Valid
-                                                             @RequestBody SearchFlightsRequest request,
-                                                             @RequestParam(defaultValue = "0") Integer page
-    ) {
-        System.out.println(request.getDepartureDate());
+    public Map<String, Object> searchFlights
+            (
+                    @Valid
+                    @RequestBody SearchFlightsRequest request,
+                    @RequestParam(defaultValue = "0") Integer page
+            ) {
         List<Flight> foundFlights = flightsService.searchFlights(request);
         Integer totalItems = foundFlights.size();
         Map<String, Object> response = new HashMap<>();
@@ -53,7 +49,7 @@ public class CustomerFlightsController {
         response.put("page", page);
         response.put("totalItems", totalItems);
 
-        return ResponseEntity.ok(response);
+        return response;
     }
 
 

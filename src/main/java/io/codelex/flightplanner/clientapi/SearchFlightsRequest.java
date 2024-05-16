@@ -25,11 +25,7 @@ public class SearchFlightsRequest {
 
     @AssertTrue
     public boolean isDifferentDepartureAndArrival() {
-        try {
-            return !from.equals(to);
-        } catch (NullPointerException e) {
-            return false;
-        }
+        return from != null && to != null && !from.equals(to);
     }
 
     public String getFrom() {

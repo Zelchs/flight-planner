@@ -1,5 +1,6 @@
 package io.codelex.flightplanner.adminapi;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.codelex.flightplanner.airports.Airport;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
@@ -21,48 +22,36 @@ public class AddFlightRequest {
     @NotBlank
     private final String carrier;
     @Valid
-    @NotBlank
-    private final String departureTime;
+    @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    private final LocalDateTime departureTime;
     @Valid
-    @NotBlank
-    private final String arrivalTime;
-
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    private final LocalDateTime arrivalTime;
 
 
     public AddFlightRequest(Airport from, Airport to, String carrier, String departureTime, String arrivalTime) {
         this.from = from;
         this.to = to;
         this.carrier = carrier;
-        this.departureTime = departureTime;
-        this.arrivalTime = arrivalTime;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        this.departureTime = LocalDateTime.parse(departureTime, formatter);
+        this.arrivalTime = LocalDateTime.parse(arrivalTime, formatter);
     }
 
     @AssertTrue
     public boolean hasDifferentAirports() {
-        try {
-            return !from.equals(to);
-        } catch (Exception e) {
-            return false;
-        }
+        return from != null && to != null && !from.equals(to);
     }
 
     @AssertTrue
     public boolean isArrivalAfterDeparture() {
-        try {
-            LocalDateTime departure = LocalDateTime.parse(this.departureTime, formatter);
-            LocalDateTime arrival = LocalDateTime.parse(this.arrivalTime, formatter);
-            return arrival.isAfter(departure);
-        } catch (Exception e) {
-            return false;
-        }
-
+        return departureTime != null && arrivalTime != null && departureTime.isBefore(arrivalTime);
     }
 
     public Flight toDomain(Integer id) {
-        LocalDateTime departure = LocalDateTime.parse(departureTime, formatter);
-        LocalDateTime arrival = LocalDateTime.parse(arrivalTime, formatter);
-        return new Flight(id, from, to, carrier, departure, arrival);
+        return new Flight(id, from, to, carrier, departureTime, arrivalTime);
     }
 
     public Airport getFrom() {
@@ -77,11 +66,11 @@ public class AddFlightRequest {
         return carrier;
     }
 
-    public String getDepartureTime() {
+    public LocalDateTime getDepartureTime() {
         return departureTime;
     }
 
-    public String getArrivalTime() {
+    public LocalDateTime getArrivalTime() {
         return arrivalTime;
     }
 }
