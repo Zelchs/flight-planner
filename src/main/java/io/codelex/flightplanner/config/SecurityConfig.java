@@ -19,8 +19,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/admin-api/**").authenticated()
-                        .anyRequest().permitAll());
+                        .requestMatchers("/testing-api/**", "/api/**", "/error/**").permitAll()
+                        .anyRequest().authenticated());
 
         return http.build();
     }
