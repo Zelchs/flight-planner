@@ -1,7 +1,8 @@
-package io.codelex.flightplanner.adminapi;
+package io.codelex.flightplanner.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.codelex.flightplanner.airports.Airport;
+import io.codelex.flightplanner.domain.Airport;
+import io.codelex.flightplanner.domain.Flight;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;

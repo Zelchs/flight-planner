@@ -1,4 +1,4 @@
-package io.codelex.flightplanner.clientapi;
+package io.codelex.flightplanner.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.AssertTrue;

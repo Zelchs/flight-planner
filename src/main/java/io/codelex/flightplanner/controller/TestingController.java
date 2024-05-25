@@ -1,6 +1,6 @@
-package io.codelex.flightplanner.testing;
+package io.codelex.flightplanner.controller;
 
-import io.codelex.flightplanner.adminapi.FlightsService;
+import io.codelex.flightplanner.service.FlightsService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

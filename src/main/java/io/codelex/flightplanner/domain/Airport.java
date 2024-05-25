@@ -1,4 +1,4 @@
-package io.codelex.flightplanner.airports;
+package io.codelex.flightplanner.domain;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

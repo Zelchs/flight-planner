@@ -1,7 +1,9 @@
-package io.codelex.flightplanner.adminapi;
+package io.codelex.flightplanner.service;
 
-import io.codelex.flightplanner.airports.Airport;
-import io.codelex.flightplanner.clientapi.SearchFlightsRequest;
+import io.codelex.flightplanner.repository.FlightsRepository;
+import io.codelex.flightplanner.domain.Airport;
+import io.codelex.flightplanner.request.SearchFlightsRequest;
+import io.codelex.flightplanner.domain.Flight;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

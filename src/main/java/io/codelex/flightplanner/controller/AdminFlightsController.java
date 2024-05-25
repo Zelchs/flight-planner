@@ -1,5 +1,8 @@
-package io.codelex.flightplanner.adminapi;
+package io.codelex.flightplanner.controller;
 
+import io.codelex.flightplanner.service.FlightsService;
+import io.codelex.flightplanner.domain.Flight;
+import io.codelex.flightplanner.request.AddFlightRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
