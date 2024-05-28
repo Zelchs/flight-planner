@@ -1,3 +1,4 @@
+
 package io.codelex.flightplanner.repository;
 
 import io.codelex.flightplanner.domain.Airport;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @Repository
-public class FlightsRepository {
+public class FlightsRepositoryInMemory {
     private final Set<Flight> flights = new HashSet<>();
 
     public synchronized Flight add(Flight flight) {
@@ -28,7 +29,7 @@ public class FlightsRepository {
 
     public synchronized Flight getFlightById(Integer id) {
         for (Flight flight : flights) {
-            if (flight.id().equals(id)) {
+            if (flight.getId().equals(id)) {
                 return flight;
             }
         }
@@ -36,18 +37,18 @@ public class FlightsRepository {
     }
 
     public synchronized void deleteFlight(Integer id) {
-        flights.removeIf(flight -> flight.id().equals(id));
+        flights.removeIf(flight -> flight.getId().equals(id));
     }
 
     public synchronized List<Airport> getAirports(String search) {
         List<Airport> matchedAirports = new ArrayList<>();
         String keyword = search.toLowerCase().trim();
         for (Flight flight : flights) {
-            if (airportContainsText(flight.from(), keyword)) {
-                matchedAirports.add(flight.from());
+            if (airportContainsText(flight.getFrom(), keyword)) {
+                matchedAirports.add(flight.getFrom());
             }
-            if (airportContainsText(flight.to(), keyword)) {
-                matchedAirports.add(flight.to());
+            if (airportContainsText(flight.getTo(), keyword)) {
+                matchedAirports.add(flight.getTo());
             }
         }
         return matchedAirports.stream().distinct().toList();
@@ -58,9 +59,9 @@ public class FlightsRepository {
 
         for (Flight flight : flights) {
             if (
-                    flight.from().airport().equals(request.getFrom())
-                            && flight.to().airport().equals(request.getTo())
-                            && flight.departureTime().toLocalDate().equals(request.getDepartureDate())
+                    flight.getFrom().getAirport().equals(request.getFrom())
+                            && flight.getTo().getAirport().equals(request.getTo())
+                            && flight.getDepartureTime().toLocalDate().equals(request.getDepartureDate())
             ) {
                 foundFlights.add(flight);
             }
@@ -69,9 +70,9 @@ public class FlightsRepository {
     }
 
     private boolean airportContainsText(Airport airport, String text) {
-        return airport.city().toLowerCase().contains(text)
-                || airport.country().toLowerCase().contains(text)
-                || airport.airport().toLowerCase().contains(text);
+        return airport.getCity().toLowerCase().contains(text)
+                || airport.getCountry().toLowerCase().contains(text)
+                || airport.getAirport().toLowerCase().contains(text);
     }
 
 }

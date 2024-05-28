@@ -34,7 +34,7 @@ public class AdminFlightsController {
         if (flightsService.add(flight).isPresent()) {
             return flight;
         }
-        throw new ResponseStatusException(HttpStatus.CONFLICT);
+        throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate flight");
     }
 
     @DeleteMapping("/{id}")
