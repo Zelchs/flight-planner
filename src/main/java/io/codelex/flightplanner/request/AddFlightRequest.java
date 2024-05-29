@@ -41,7 +41,7 @@ public class AddFlightRequest {
         this.arrivalTime = LocalDateTime.parse(arrivalTime, formatter);
     }
 
-    @AssertTrue(message = "Departure and arrival airports must be different")
+    @AssertTrue
     public boolean hasDifferentAirports() {
         return from != null && to != null && !from.equals(to);
     }
