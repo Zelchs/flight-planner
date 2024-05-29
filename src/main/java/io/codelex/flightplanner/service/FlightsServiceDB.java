@@ -5,10 +5,10 @@ import io.codelex.flightplanner.domain.Flight;
 import io.codelex.flightplanner.repository.AirportRepository;
 import io.codelex.flightplanner.repository.FlightRepositoryDB;
 import io.codelex.flightplanner.request.SearchFlightsRequest;
+import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,10 +62,11 @@ public class FlightsServiceDB implements FlightsService {
 
     @Override
     public Integer getNewId() {
-        return id.incrementAndGet();
+        return null;
     }
 
     @Override
+    @Transactional
     public Flight getFlightById(Integer id) {
         return flightRepositoryDB.findById(id).orElse(null);
     }
@@ -82,20 +83,19 @@ public class FlightsServiceDB implements FlightsService {
     }
 
     @Override
-    @Transactional
     public List<Flight> searchFlights(SearchFlightsRequest request) {
-        Airport fromAirport = airportRepository.findByAirport(request.getFrom().toUpperCase());
-        Airport toAirport = airportRepository.findByAirport(request.getTo().toUpperCase());
+        Airport fromAirport = airportRepository.findByAirportContainingIgnoreCase(request.getFrom().toUpperCase());
+        Airport toAirport = airportRepository.findByAirportContainingIgnoreCase(request.getTo().toUpperCase());
 
         if (fromAirport == null || toAirport == null) {
             return List.of();
         }
 
-        return flightRepositoryDB.findByFromAndToAndDepartureTime(fromAirport.getAirport(), toAirport.getAirport(), request.getDepartureDate().atStartOfDay());
+        return flightRepositoryDB.findByFromAndToAndDepartureTime(fromAirport.getAirport(), toAirport.getAirport(), request.getDepartureDate());
     }
 
     private Airport findOrCreateAirport(Airport airport) {
-        Airport existingAirport = airportRepository.findByAirport(airport.getAirport());
+        Airport existingAirport = airportRepository.findByAirportContainingIgnoreCase(airport.getAirport());
         return existingAirport != null ? existingAirport : airportRepository.save(airport);
     }
 }
