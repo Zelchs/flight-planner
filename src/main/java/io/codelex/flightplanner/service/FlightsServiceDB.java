@@ -12,12 +12,10 @@ import org.springframework.dao.OptimisticLockingFailureException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Profile("db")
 public class FlightsServiceDB implements FlightsService {
 
-    private final AtomicInteger id = new AtomicInteger(0);
     private final FlightRepositoryDB flightRepositoryDB;
     private final AirportRepository airportRepository;
 
@@ -35,7 +33,7 @@ public class FlightsServiceDB implements FlightsService {
         flight.setFrom(fromAirport);
         flight.setTo(toAirport);
 
-        List<Flight> existingFlights = flightRepositoryDB.findByFromAndToAndCarrierAndDepartureTimeAndArrivalTime(
+        List<Flight> duplicateFlights = flightRepositoryDB.findByFromAndToAndCarrierAndDepartureTimeAndArrivalTime(
                 fromAirport.getAirport(),
                 toAirport.getAirport(),
                 flight.getCarrier(),
@@ -43,7 +41,7 @@ public class FlightsServiceDB implements FlightsService {
                 flight.getArrivalTime()
         );
 
-        if (!existingFlights.isEmpty()) {
+        if (!duplicateFlights.isEmpty()) {
             return Optional.empty();
         }
 
@@ -58,11 +56,6 @@ public class FlightsServiceDB implements FlightsService {
     public void clear() {
         flightRepositoryDB.deleteAll();
         airportRepository.deleteAll();
-    }
-
-    @Override
-    public Integer getNewId() {
-        return null;
     }
 
     @Override

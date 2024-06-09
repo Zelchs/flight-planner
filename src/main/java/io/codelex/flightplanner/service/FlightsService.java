@@ -15,8 +15,6 @@ public interface FlightsService {
 
     void clear();
 
-    Integer getNewId();
-
     Flight getFlightById(Integer id);
 
     void deleteFlight(Integer id);

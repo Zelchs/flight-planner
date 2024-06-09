@@ -26,7 +26,6 @@ public class FlightsRepositoryInMemory {
         flights.clear();
     }
 
-
     public synchronized Flight getFlightById(Integer id) {
         for (Flight flight : flights) {
             if (flight.getId().equals(id)) {

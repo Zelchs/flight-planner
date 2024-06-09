@@ -1,7 +1,6 @@
 package io.codelex.flightplanner.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -19,13 +18,11 @@ public class Flight {
     @ManyToOne
     @JoinColumn(name = "from_airport_id", nullable = false)
     @NotNull
-    @JsonIgnoreProperties({"id"})
     private Airport from;
 
     @ManyToOne
     @JoinColumn(name = "to_airport_id", nullable = false)
     @NotNull
-    @JsonIgnoreProperties({"id"})
     private Airport to;
 
     @NotEmpty

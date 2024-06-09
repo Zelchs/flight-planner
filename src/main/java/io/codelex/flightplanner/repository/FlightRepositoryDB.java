@@ -20,7 +20,6 @@ public interface FlightRepositoryDB extends JpaRepository<Flight, Integer> {
             @Param("departureTime") LocalDate departureTime
     );
 
-
     @Query("SELECT f FROM Flight f WHERE f.from.airport = :fromCode AND f.to.airport = :toCode AND f.carrier = :carrier AND f.departureTime = :departureTime AND f.arrivalTime = :arrivalTime")
     List<Flight> findByFromAndToAndCarrierAndDepartureTimeAndArrivalTime(
             @Param("fromCode") String fromCode,

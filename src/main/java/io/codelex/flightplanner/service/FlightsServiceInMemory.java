@@ -15,7 +15,6 @@ public class FlightsServiceInMemory implements FlightsService {
 
     private final AtomicInteger id = new AtomicInteger(0);
 
-
     FlightsRepositoryInMemory flightsRepositoryInMemory;
 
     public FlightsServiceInMemory(FlightsRepositoryInMemory flightsRepositoryInMemory) {
@@ -23,15 +22,12 @@ public class FlightsServiceInMemory implements FlightsService {
     }
 
     public Optional<Flight> add(Flight flight) {
+        flight.setId(id.incrementAndGet());
         return Optional.ofNullable(flightsRepositoryInMemory.add(flight));
     }
 
     public void clear() {
         flightsRepositoryInMemory.clear();
-    }
-
-    public Integer getNewId() {
-        return id.incrementAndGet();
     }
 
     public Flight getFlightById(Integer id) {
