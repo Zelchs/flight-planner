@@ -30,7 +30,7 @@ public class AdminFlightsController {
     @PutMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public Flight addFlight(@Valid @RequestBody AddFlightRequest request) {
-        Flight flight = request.toDomain(flightsService.getNewId());
+        Flight flight = request.toDomain();
         if (flightsService.add(flight).isPresent()) {
             return flight;
         }

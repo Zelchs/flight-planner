@@ -51,8 +51,8 @@ public class AddFlightRequest {
         return departureTime != null && arrivalTime != null && departureTime.isBefore(arrivalTime);
     }
 
-    public Flight toDomain(Integer id) {
-        return new Flight(id, from, to, carrier, departureTime, arrivalTime);
+    public Flight toDomain() {
+        return new Flight(null, from, to, carrier, departureTime, arrivalTime);
     }
 
     public Airport getFrom() {

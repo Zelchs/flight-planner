@@ -1,52 +1,26 @@
 package io.codelex.flightplanner.service;
 
-import io.codelex.flightplanner.repository.FlightsRepository;
 import io.codelex.flightplanner.domain.Airport;
-import io.codelex.flightplanner.request.SearchFlightsRequest;
 import io.codelex.flightplanner.domain.Flight;
+import io.codelex.flightplanner.request.SearchFlightsRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-public class FlightsService {
+public interface FlightsService {
 
-    private final AtomicInteger id = new AtomicInteger(0);
+    Optional<Flight> add(Flight flight);
 
+    void clear();
 
-    FlightsRepository flightsRepository;
+    Flight getFlightById(Integer id);
 
-    public FlightsService(FlightsRepository flightsRepository) {
-        this.flightsRepository = flightsRepository;
-    }
+    void deleteFlight(Integer id);
 
-    public Optional<Flight> add(Flight flight) {
-        return Optional.ofNullable(flightsRepository.add(flight));
-    }
+    List<Airport> getAirports(String search);
 
-    public void clear() {
-        flightsRepository.clear();
-    }
+    List<Flight> searchFlights(SearchFlightsRequest request);
 
-    public Integer getNewId() {
-        return id.incrementAndGet();
-    }
-
-    public Flight getFlightById(Integer id) {
-        return flightsRepository.getFlightById(id);
-    }
-
-    public void deleteFlight(Integer id) {
-        flightsRepository.deleteFlight(id);
-    }
-
-    public List<Airport> getAirports(String search) {
-        return flightsRepository.getAirports(search);
-    }
-
-    public List<Flight> searchFlights(SearchFlightsRequest request) {
-        return flightsRepository.searchFlights(request);
-    }
 }
